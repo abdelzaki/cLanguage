@@ -1,0 +1,312 @@
+c language:
+    - it is middle language 
+    - u can access memory and bit manipulation
+
+- headers:
+    stdio.h : standard input output
+        - printf
+        - scanf
+
+variable:
+    - declare 
+        - int var;
+    - decalre and initilized:
+        - int var = 12;
+    - reassign:
+        int var = 12;
+        var = 1;    
+
+- to access the enviroment varaiable:
+    - #include <stdlib.h>
+    char *getenv(const char* name);
+    
+
+integer:
+    - to know the size of a variable use sizeof(), which is an operator
+    - 1 byte = 0xff = 255
+    - 2 byte = 0xffff = 65535
+    - if the value of the variable exceeded the max then the variable would start from 0 again
+
+- fprintf(FILE* stream, const char *format,...)
+    - write the formatted data to the stream
+
+- snprintf:
+    - would write formatted string to the buffer 
+    - ex:
+        - snprintf(buff, MAXLEN, "%s", name)
+
+- printf:
+    - the first parameter is also a string iterator ""
+    - %d -> signed int
+    - %u -> unsigned int
+    - pointer:
+        - if u want to print the address where the pointer point to use %p
+        ex:
+            char* c;
+            printf("the address is %p",c);
+    - bool:
+        - if u want to print bool value u have to use if statment 
+        - ex:
+            - printf(" write %s \n", p_ring->writeValid?"true":"false");
+
+- puts("ss"):
+    - print string to standard output
+    - it is equal to printf("%s", "word");
+
+- using debug technik:
+    - ex:
+        #ifdef enable_diag          // if output of diagnostic messages enabled
+        #define sprintDebug(x, y, args...)    sprintf(x, y, ##args)
+        #else
+        #define sprintDebug(x, y, args...)
+        #endif
+
+- strcpy(char x[N], char y[N] )
+    - copy the content of array y to array x
+- macro
+    # : to add "" around the varaiable
+    ## : var ## _cmd 
+- variadic:
+    convert ... to __VA_ARGS__ in macro 
+
+- struct:
+    - it is a way to group the data in some logic
+    -ex: 
+        typedef struct{char first; char second; } sample_t;
+        sample_t var;
+- enum:
+    - to assign integer to variable
+    - ex:
+        - typedef enum {
+            empty,
+            received,
+            sending, 
+        } t_packetState
+
+- function pointer:
+    - typedef void (*TCmdReceivedCallbackPtr)(uint16_t nCmd, uint8_t* pData, uint8_t nDataLen);
+
+- object files:
+    - application binary interface ABI:
+        - instruction set, memory layout
+        - existing data type, size, alignmenet
+        - function calling conventation
+        - used object file format
+    - object file format: 
+        ELF format
+    - exectuable object file
+    - static library:
+        - to link against static library
+        - gcc -L/location nameOfLib 
+    - dynamic library:
+        - the library location should be given to the following enviroment variable
+        - export LD_LIBRARY_PATH=/opt/geometry
+
+- object oriented:
+    - object can be construced in two ways:
+        - one:
+            - object without any attribute and the attribute would be added at the run time
+            - this method is called prototypr-based OOP
+
+        - two:
+            - the class is templed which is compiled before 
+            - u cannot change the class at the run time
+            - th is known as class-based OOP
+
+- Linux layout:
+    - HW -> OS -> shell[library which has standard API, application]
+    - HW -> kernel -[system call]-> shell(libc) -function call-> application
+
+- kernel process vs user process:
+    - kernel first is started then then can create user process
+    - one kernel process is active at a time 
+
+- kernel development:
+    - one process run in the kernel
+    - no libc is provided like glibc for the kernel
+    - u have full access to the memory
+    - 
+- file I/O :
+    - to work on file u need 5 functions open, read, write, lseek, and close
+    - it is unbuffered I/O means it called a system call immediatley
+    - all open files are referred to by file descriptors 
+    - file descriptors has 0 as standard input, 1 as standard output, 2 as standard error
+    - the standard is to used STDIN_FILEENO, STDOUT_FILEENO, STDERR_FILEENO  which are 
+    defined in unistd.h header 
+    - file descriptors are per process 
+    - the header is provided in fcntl.h
+    - open function:
+        - it would return -1 for failed
+        - int open(const char* path, int oflag, mode_t mode)
+            - oflag:    Mandatory: O_RDONLY, O_WRONLY, O_RDWR, O_EXEC
+                        Options:  O_APPEND, O_CLOEXEC, O_CREAT, O_EXCL, O_NONBLOCK. O_SYNC 
+            - mode: it is important only if u use open to create the file to set the permission of the file
+            otherwise it is ignored
+
+        - to create file use 
+            - open(path, O_CREAT | O_TRUNC | O_WRONLY)
+    - close function:
+        - int close(int fd);
+    -  ssize_t read(int fd, char *buf, size_t nbytes)
+        - return the number of byte which is read
+    - ssoze write(int fd, char *buf, size_t nbytes)
+
+- to duplicate file descriptors:
+    - int dup2(int fd, int fd2)
+        - duplicate fd in fd2
+
+- fcntl(int fd, int cmd, arg):
+    - u can change the the status of the file like read only, write only 
+
+- errno:
+    - this varible would be set when the system call failed
+    - it wont be reseted if the system call successed 
+    - tp print the message use perror("msg") which would print the message plus the message according to
+        errno
+
+- macros:
+    # define min(m,x) ((m) < (n) ? (m) : (n))
+    # define max(m,x) ((m) > (n) ? (m) : (n))
+- operators:
+    - &  : bit and operator
+    - |  : bit or operator
+    - && : logical and operation
+    - || : logical or Operator
+    - << : left shift operator 
+    - >> : right shift is like division  
+    - ^  : xor like or but if two ones then it would be zero
+
+- compiling process:
+    - to convert the program to a machine which the computer can understand and execute steps should be implemented
+    there are 3 steps:
+        1- preprocessing: would be implemented on the lines which has # called directives
+        2- compiling: would convert the program to a object code. the program is not yet ready to be used 
+        3- linking: the linker would combine the objects to produce an exectuable file which can be used  
+
+- comment in c language:
+    - to use comment in c /* --- */ or //
+
+- declaration:
+    - to say that a variable of a specific name exist and has a specific type 
+
+- printf/scanf:
+    - f means formated 
+    - printf("string", expr1, expr2, ..);
+    - compiler does not check that the expression and the string matches, if the number of the formated and the variable does not match the compiler wont produce an error 
+    - formating:
+        - %d is used to print a decimal number
+        - to define a minimal number of digit which must be printed %.2d would print at least two digits. if the number less than 2 digits, zeros would be added to the left of the number 
+        - ex:
+            print("%.2d", x);
+        - using %5d would define the minimual characters for the formated variable where space is considered to be a character 
+        - ex:
+            x = 1;
+            print("%3.2d",x);
+            - would print " 01" which is two digits 01 and three charcters which are space, 0 and 1 
+            - %u base 10
+            - %x hex
+            - %hd short integer
+    - sprintf(varOfTypeArrayChar, "format", var1,var2);
+
+- macro:
+    - it can be used to define a constant variable
+    - ex:
+        #define INCHES_PER_POUND 166
+    - if the macro has an operation we should use parentheses 
+    - ex:
+        #define MACRO_OPERATION (1 / 12)
+
+- types in c:
+    -  numeric types could be integer or float which define the value but doesnot define how the value would be stored in memory how much memory would the variable consume.
+    - to decide the size of the variable another defination is needed which is short, long, long long 
+    - numeric types:
+        - integer
+            - signed 
+            - unsigned
+        - float
+- read / write character:
+    - putchar(ch) 
+    - ch = getchar()
+
+- to get the size of a variable u can use sizeof
+    - ex:
+        sizeof(int), sizeof(x)
+
+- array:
+    - int x[10];
+        - array which have the size 10
+    - to get the size of the array u divide the whole size and the size of an element
+    ex:
+        int size = sizeof(x)/sizeof(x[0]);
+        
+- scope:
+    - local : block scope and temp storage duration
+    - static local : block scope and static storage duration 
+    - global: static local duration, file scope
+
+- pointer:
+    - it is a variable which point to an address
+    - pointer should point to a specific data type 
+    - & to get the address of a variavble while * is used to dereference a variable
+    - the pointer can be used to pass a variable to a function and change the value of that variable by dereferencing the variable 
+    - function can return pointer to external variable, static variable but not a local variable    
+
+- string:
+    - it is any thing inside ""
+    - string is stored as const char* p means u cannot change the value of the string once u created it but u can access element of the string 
+    - char *pointer ="ahmed";
+        - it is a const char array
+        - pointer[0]='A' -> would caúse the program to crash
+
+    - char array[] = "ahmed";
+        - it is an array
+        array[0] = 'A'; -> it is ok 
+    - u cannot copy an string 
+    char P[10];
+    p = "ahmed"; -> error
+    char p[10] = "ahmed"; -> ok
+
+- macro:
+    - define end with the first new line 
+    - if u want to continue u have to use \
+    - function like macro:
+        - define max(x,y) ((x)>(y)?(x):(y))
+        - u should need write space betweem the name of the macro and the parenthesis 
+        - macro parameter maybe evaluate more than once which is different than how the function would behave
+            max(i++,z)
+
+    - # : it is used to make the parameter as string
+    - ## : it is used to concatenate the two params
+    - if u want to use macro which extend on a multiple lines write the macro as do{} while(0), as while expect ; at the end 
+
+- operator:
+    - comma operator:
+    - c would execute the command before the comma and return the last element
+        - int x =1 , y=2 , z=3 ; 
+            - it is used as seperator and 
+        x = (1,2,3); -> x = 3 
+        x= 1,2,3 -> x = 1
+        int x = 1,2,3 -> error
+
+- structure:
+    - it is a way to compund data of different types in a single datatype
+    - structure is passed by value means a copy of the structure would be created if u passed the structure to a function
+    ex1:
+        - struct{ ....} var -> create variable
+    ex2:
+        - struct type {...}; -> create type
+        . struct type var -> use the type to create variable
+    ex3:
+        typedef type{...}; -> create type
+        type var -> create variable
+    ex4:
+        typedef struct type {..} var ->  create type and variable in one step
+
+- bit operation:
+    - set a bit field: x |= (1<<n);
+    - reset a bit field: x &= ~(1<<n);
+    - test a bit field: (x & (1<<n));
+    - to set a certain bit field
+    x |=( address of bits) | (1<<4);
+
+- embedded HW:
