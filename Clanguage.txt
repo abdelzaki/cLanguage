@@ -163,7 +163,7 @@ integer:
     - it wont be reseted if the system call successed 
     - tp print the message use perror("msg") which would print the message plus the message according to
         errno
-
+-------------------------------------------------------------------------------------------
 - macros:
     # define min(m,x) ((m) < (n) ? (m) : (n))
     # define max(m,x) ((m) > (n) ? (m) : (n))
@@ -288,6 +288,14 @@ integer:
         x= 1,2,3 -> x = 1
         int x = 1,2,3 -> error
 
+- typedef:
+    - typedef name alias;
+    - typedef char bool_t;
+
+- stdint.h:
+    - int8_t, int16_t,unit8 ... are defined in stdint.h 
+    - where int8 is alias for char, 16 alias for short 
+
 - structure:
     - it is a way to compund data of different types in a single datatype
     - structure is passed by value means a copy of the structure would be created if u passed the structure to a function
@@ -310,3 +318,68 @@ integer:
     x |=( address of bits) | (1<<4);
 
 - embedded HW:
+-different HW architecture:
+    - Von Neumann: store the data and the instruction in the same place, and use the same bus to get the data and the instrucion which make the architecture slower comparing to the Hardvard architecture
+    - Hardvard: the data and the instrcution are stored in different area, and use different buses for data, and another bus for instruction 
+    - most DSP use Hardvard 
+
+- instruction set:
+    - it is the command which the processor can understand there are two main types of the instruction set CISC and RISC 
+    - CISC:
+        - it support more instrcutions such as multipluation
+        - the instruction might be executed in more than one cycle 
+    -RISC:
+        - it has less instructions to support
+        - the instruction needs one cycle to be executed 
+- memory:
+    - u can divide the volatile into ROM, PROM, EPROM, EEPROM, Flash
+    - non volatile:
+        - SRAM: static doesnot need to be refreshed, fast, expensiver
+        - DRAM: based on capacitor, needed to be recharged, slower, cheaper
+- I/O:
+    - momory mapped io: the io has the same address space as the main memory
+    - port map io : there is instruction which is made only for the io 
+
+- operating system tasks:  
+    - in general the opreating system is resource allocator. the resources are CPU, memory, I/Os
+    following would be a list of the resources which the OS would provide 
+    1- process managment:
+        - OS control which process would run and for long should the process be active
+    2- memory managment:
+        - which address is avaliable to the process 
+
+- bus:
+    - the buses are divided in three types: data, address, control
+    - data : is the information which we write or read
+    - address: where we write the data or where we read the data from
+    - control : decide of we read the data or write the data 
+
+- micro controller: 
+    - it is a micro processor + perpherial (timer, memory, UART)
+
+- DSP:
+    - mirco processor which can perform multiple in one instruction 
+ 
+- in C:
+    kb = 1024 = 2^10 
+    2kb = 2028 = 2^11
+    4kb = 4056 = 2^12
+
+- when u work with integer and the float at the same time the result would map to the float,  and when we store the result to an variavle the data would map to the variable 
+
+
+
+- IDE:
+    - integerated developement
+
+- toolchain:
+    - compiler + linker + c.libs + binutils 
+    - native : code would run on the same device which has compiled the SW 
+    - cross toolchain : the program would run on different device than has compiled the SW
+
+- minGW:
+    - it is the native toolchain which would produce code which would run on the PC
+
+
+
+
