@@ -82,6 +82,17 @@ integer:
             received,
             sending, 
         } t_packetState
+    - u can use enum as return value of an API to say what the API can return
+    - ex:
+        - typedef enum{
+        erro,
+        ok,
+        empty
+        } status
+
+        - status myfunction();
+        - here the function would return something from this enum
+
 
 - function pointer:
     - typedef void (*TCmdReceivedCallbackPtr)(uint16_t nCmd, uint8_t* pData, uint8_t nDataLen);
@@ -380,6 +391,19 @@ integer:
 - minGW:
     - it is the native toolchain which would produce code which would run on the PC
 
+######################
+### Data structure ###
+######################
 
+- Data structure:
+    - FIFO : first in first output -> buffer
+    - LIFO : last input first output -> stack
+
+- ADT:
+    - abstrack data type
+    - it is an interface which enable the user to use the data 
+
+- state machine:
+    - ttool : it is a tool which u might use to draw state machine 
 
 
