@@ -329,6 +329,12 @@ integer:
     x |=( address of bits) | (1<<4);
 
 - embedded HW:
+
+- IC:
+    - integrated circuit
+    - it has one task like timer  
+
+
 -different HW architecture:
     - Von Neumann: store the data and the instruction in the same place, and use the same bus to get the data and the instrucion which make the architecture slower comparing to the Hardvard architecture
     - Hardvard: the data and the instrcution are stored in different area, and use different buses for data, and another bus for instruction 
