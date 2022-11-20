@@ -175,6 +175,10 @@ integer:
     - tp print the message use perror("msg") which would print the message plus the message according to
         errno
 -------------------------------------------------------------------------------------------
+###################
+#### c language ###
+###################
+
 - macros:
     # define min(m,x) ((m) < (n) ? (m) : (n))
     # define max(m,x) ((m) > (n) ? (m) : (n))
@@ -201,7 +205,7 @@ integer:
     - to say that a variable of a specific name exist and has a specific type 
 
 - printf/scanf:
-    - f means formated 
+    - f means formated, This function is in the header file <stdio.h>
     - printf("string", expr1, expr2, ..);
     - compiler does not check that the expression and the string matches, if the number of the formated and the variable does not match the compiler wont produce an error 
     - formating:
@@ -276,6 +280,12 @@ integer:
     char P[10];
     p = "ahmed"; -> error
     char p[10] = "ahmed"; -> ok
+    - strlen():
+        - this would get the size of the string till '\n' is found     
+    - if u want to add something to a string u can use strcat. for example u want to add a new line at the beging of the string
+    - sprintf(DUMMYBUF,"\r\n");
+    - strcat(oldstring,DUMMYBUF)
+
 
 - macro:
     - define end with the first new line 
@@ -325,8 +335,64 @@ integer:
     - set a bit field: x |= (1<<n);
     - reset a bit field: x &= ~(1<<n);
     - test a bit field: (x & (1<<n));
+    - toggle a bit: x ^=(1<<n); would toggle the bit which i am interested in 
     - to set a certain bit field
-    x |=( address of bits) | (1<<4);
+        - u have first use & to reset the range of bit u want write at. then use | to write the value u want 
+        - myvar &= 0xFF0F; // to make sure that the bits which i would write is already zeros. because i might want to write 101 and the original data is 010 so if i used only or the one in the middle would remain also one 
+        - myvar |= 1<<4;
+
+- volatile:
+    - means the data can be changed at anytime.
+    - it would prevent the optimasation reduce the reading action on the variavble
+    - int volatile* regAddress = 0xafcdf; 
+
+- how to access register in SOC:
+    - #define myregister = *((volatile unsigned int*)(0x306100)) // cast the address and use it as pointer so u dont have to dereference the register as the myregister is already dereferenced 
+
+- to declare array of pointer to function:
+    - void (*arr[3])(void *): array of size 3 to function. The function take void* arrags and return void
+
+- if u want to define general pointer to function which take general data
+    - typedef struct s_name { void *data; void (*function)(*data)} s_name;
+    - s_name task1 , task2;
+    - task1.data = &var
+    - task1.func = nameofFunction
+    - task1.func((void*)task1.data);
+
+
+
+##############
+#### tools ###
+##############
+
+- IDE:
+    - integerated developement
+
+- toolchain:
+    - compiler + linker + c.libs + binutils 
+    - native : code would run on the same device which has compiled the SW 
+    - cross toolchain : the program would run on different device than has compiled the SW
+
+- keil micro vision:
+    - it is the idl for arm which has simulation 
+    - it has a package installer which has files which are needed to program aboard which has arm processor
+    - u can download starter, CMSIS software which is something like RTOS 
+    - u can use it to debug the SW
+    - new project in keil, project->options->output-> rename the file to --.axf which is the file we compiled from the eclipse and the name of the executable and put the file with .c extensio
+
+- minGW:
+    - it is the native toolchain which would produce code which would run on the PC
+    
+- timer in c:
+    - define array which has address of variable as element
+    - every time the systick happens iteration throw array happen, and one would be addedd if the address of the element is a valid address
+
+####################
+#### embedded HW ###
+####################
+
+- embedded hardware consist of 5 elements
+    - CPU, Input, Output, memory, bus
 
 - embedded HW:
 
@@ -334,25 +400,55 @@ integer:
     - integrated circuit
     - it has one task like timer  
 
+- microprocessor:
+    - it is an IC which perform logic operation, arithmatic ALU, CU register, Cache
+
+- instruction lifr cycle:
+    - fetch, decode, execute
+
+- micro processor:
+    - it is micro controller + memory + I/O
+
+- kit:
+    - micro controller on a board
+
+- ECU:
+    - it is kit + sensors + actuator
+
+- register:
+    - it is a collection of flip flop
 
 -different HW architecture:
     - Von Neumann: store the data and the instruction in the same place, and use the same bus to get the data and the instrucion which make the architecture slower comparing to the Hardvard architecture
     - Hardvard: the data and the instrcution are stored in different area, and use different buses for data, and another bus for instruction 
     - most DSP use Hardvard 
 
+- clock define the speed in which the cpu would execute the instruction  
+
 - instruction set:
     - it is the command which the processor can understand there are two main types of the instruction set CISC and RISC 
-    - CISC:
+    - CISC: 
+        - complex
         - it support more instrcutions such as multipluation
         - the instruction might be executed in more than one cycle 
     -RISC:
+        - reduced
         - it has less instructions to support
         - the instruction needs one cycle to be executed 
+
+- instruction consist of operation(op-code) and operand which is the data the operation would be executed on
+    if the instruction 32 bits size. some part of the instruction would be devoted to the op-code while the other part would be devoted to the operand which are the registers which have the data to work on. an example for instruction would be something like load, store, move  
+
 - memory:
     - u can divide the volatile into ROM, PROM, EPROM, EEPROM, Flash
     - non volatile:
         - SRAM: static doesnot need to be refreshed, fast, expensiver
         - DRAM: based on capacitor, needed to be recharged, slower, cheaper
+    - the data can be stord as big endian or small endian.
+        - big endian: the first byte is on the right so the word would be byte3, byte2, byte1. byte0
+        - small endian: the first byte is on the left, so the world would be byte0, byte1, byte2, byte3
+    - word size is the size of an integer 
+
 - I/O:
     - momory mapped io: the io has the same address space as the main memory
     - port map io : there is instruction which is made only for the io 
@@ -370,9 +466,10 @@ integer:
     - data : is the information which we write or read
     - address: where we write the data or where we read the data from
     - control : decide of we read the data or write the data 
+    - width : represent the size of the data which can move at the same time. Width can be 8 bits, 16 bits, 32 bits
 
 - micro controller: 
-    - it is a micro processor + perpherial (timer, memory, UART)
+    - it is a micro processor + perpherial (timer, memory, UART, dma)
 
 - DSP:
     - mirco processor which can perform multiple in one instruction 
@@ -384,8 +481,57 @@ integer:
 
 - when u work with integer and the float at the same time the result would map to the float,  and when we store the result to an variavle the data would map to the variable 
 
+- the different between broadcast and multicast, point to point.
+    - broadcast : to all the device which is connected to the system
+    - multicast : to subset of the device which is connected to the system
+    - point to point : the data is sent from a deive to anther device 
+
+- communication is defined using 4 elements:
+    - what : means what is being transmitted
+    - with whom: who send the data and who receive the data 
+    - how : the protocal which is used to transfer the data 
+    - transportation layer : the medium in which the data is transported 
+
+- different ways of interconnection in system:
+    - star, ring, parellel
+    - star:
+        - it is a master slave communication where all the data exchange is controlled by the master 
+        - if the data want to get the status of a device in the system, the master would issue an read command to the device 
+        - the failure of one device wont prevent the system from working 
+    - ring:
+        - there is no master/ slave conncept 
+        - any device can send data to the bus.
+        - all device would receive the data
+        - the device which is interested in the data would accept it
+        - the bus here is the neck point as only one device can control the bus
+
+    - parellel:
+        - all devices can receive data
+        - only the master can send data
 
 
+#########################
+#### Operating system ###
+#########################
+
+- when the operating system has a time constrain. it is called RTOS meaning real time operating system 
+- process is a software which is executinh 
+- the part of the software which decide which process would be active is called scheduler and it has scheduler stragety 
+- every task in the system is represented by task control block (TCB). it has alot of information about the process such as process ID, CPU register, program counter, scheduling information. TCB is struct 
+
+- process status:
+    - the process which is active is called being in the run state 
+    - the process which is ready to be run but not running is called in ready state
+
+- interrupt:
+    - u can control the interrupt using Masking. which give the ability to the mirco processor to ignore the interrupt when it happens 
+    - some interrupt are not maskable which is related to system level functionality
+    - priotity interrupt where the higher priority can interrupt the low priority 
+
+- time:
+    - inteveral: it is marked by specific start and end time
+    - duration : it is the different between the start and the stop time
+    
 - IDE:
     - integerated developement
 
@@ -411,5 +557,4 @@ integer:
 
 - state machine:
     - ttool : it is a tool which u might use to draw state machine 
-
 
