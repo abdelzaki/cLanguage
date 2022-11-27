@@ -418,12 +418,35 @@ integer:
 - register:
     - it is a collection of flip flop
 
+- clock:
+    - it is used to control the speed of the SOC
+    - higher clocker means higher power consumpotion
+    - it needs a clock source which might be inside or outside source
+    - the clock might is used to control the operating system, and the CPU
+
+- RCC:
+    - reset and clock
+
+- interrupt:
+    - ir: interrupt request 
+    - isr: interrupt service routine
+    - gic : general interrupt controller
+    - external interrpt module is a HW module to controll the external interrupt, to detect if the interrupt at the rising edge or failing edge
+    - interrupt is a hardware calling a function
+
+- interrupt latency:
+    - the time between the interrupt has been raised till the the interrupt has been serviced
+
+- CMISIS:
+    - it is a library for arm
+
+- power managment unit:
+    - it is used to control the clock to reduce the power consumption
+
 -different HW architecture:
     - Von Neumann: store the data and the instruction in the same place, and use the same bus to get the data and the instrucion which make the architecture slower comparing to the Hardvard architecture
     - Hardvard: the data and the instrcution are stored in different area, and use different buses for data, and another bus for instruction 
     - most DSP use Hardvard 
-
-- clock define the speed in which the cpu would execute the instruction  
 
 - instruction set:
     - it is the command which the processor can understand there are two main types of the instruction set CISC and RISC 
@@ -446,7 +469,7 @@ integer:
         - DRAM: based on capacitor, needed to be recharged, slower, cheaper
     - the data can be stord as big endian or small endian.
         - big endian: the first byte is on the right so the word would be byte3, byte2, byte1. byte0
-        - small endian: the first byte is on the left, so the world would be byte0, byte1, byte2, byte3
+        - little endian: the first byte is on the left, so the world would be byte0, byte1, byte2, byte3
     - word size is the size of an integer 
 
 - I/O:
@@ -467,6 +490,12 @@ integer:
     - address: where we write the data or where we read the data from
     - control : decide of we read the data or write the data 
     - width : represent the size of the data which can move at the same time. Width can be 8 bits, 16 bits, 32 bits
+
+- bus bridge:
+    - some devices would be set on the another bus
+    - which is connected to the master bus
+    - the other bus doesnot need to be fast 
+    - this way we can reduce the cost as the other bus is cheaper
 
 - micro controller: 
     - it is a micro processor + perpherial (timer, memory, UART, dma)
