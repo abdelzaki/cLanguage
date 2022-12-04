@@ -81,7 +81,7 @@ integer:
             empty,
             received,
             sending, 
-        } t_packetState
+        }  
     - u can use enum as return value of an API to say what the API can return
     - ex:
         - typedef enum{
@@ -182,6 +182,10 @@ integer:
 - macros:
     # define min(m,x) ((m) < (n) ? (m) : (n))
     # define max(m,x) ((m) > (n) ? (m) : (n))
+    - u can implement switch statement using macro
+    #define test(x) (( x == 1 ? "a") ? \)
+                    ( x == 2 ? "b" ? \)
+                    : "?")
 - operators:
     - &  : bit and operator
     - |  : bit or operator
@@ -239,6 +243,11 @@ integer:
             - signed 
             - unsigned
         - float
+        - the compiler would consider any number by default as a signed number, in order to tell the compiler that the number ist unsigned u can write u at the end of the number
+        ex:
+            0x00001 -> this number is consider a signed number 
+            0x00001u -> this number is now unsigned number 
+            
 - read / write character:
     - putchar(ch) 
     - ch = getchar()
@@ -335,6 +344,7 @@ integer:
     - set a bit field: x |= (1<<n);
     - reset a bit field: x &= ~(1<<n);
     - test a bit field: (x & (1<<n));
+    - another way: (x & (1<<n) >> n == 1;
     - toggle a bit: x ^=(1<<n); would toggle the bit which i am interested in 
     - to set a certain bit field
         - u have first use & to reset the range of bit u want write at. then use | to write the value u want 
@@ -359,8 +369,11 @@ integer:
     - task1.func = nameofFunction
     - task1.func((void*)task1.data);
 
-
-
+- if u want to write a value 
+    - int x = 123u -> to say this value is unsigned because by default the values are signed values
+    - 0b1110 -> to say u are writing a binary value
+    - 0x12 -> to say are writing a binary
+    
 ##############
 #### tools ###
 ##############
@@ -437,6 +450,52 @@ integer:
 - interrupt latency:
     - the time between the interrupt has been raised till the the interrupt has been serviced
 
+- nested interrupt ex: NVIC:
+    - an interrupt can interrupt another interrupt. 
+    - preemtiy interrupt
+
+- pin:
+    - the pin might be GPIO, alternative function, or externak interrupt
+
+- GPIO:
+    - input output module
+    - alternative module is something like MUX to connect the I/O to ADC, UART, SPI, External interrupt
+
+- GPIO output:
+    - push pull:
+        - it uses 2 transistors
+        - pull would sink current from the out world
+        - push would insert current to the output world 
+        - it is best suitable with simplex connection like UART, SPI
+        - bit logic is faster than the open drain 
+
+    - open drain:
+        - current can be only absorded 
+        - only one transistor is used 
+        - in case of open drain the pin is floating means it is an open circuit 
+        - if u connected pull up resistent then when the pin is floating the output would be active, when the pin is in drain the current would be consumed in the pin and the output would be inactive 
+        - an example of the open drain is I2C bus. when all the devices are idle then the deivces would be open drain which make the voltage of the bus is high. when an device is acive it would be drain which make the bus low
+        - if u  made pushpull connection then a short circuit would happen as one is push and the other is pull making short circuit connection.
+
+- GPIO input:
+     - pull up:
+        - inside the micro controller the pin has voltage throw impedenace and the pin see 1 
+        - when u connect short circuit to the micro controller then the pin is low 
+
+    - pull down:
+        - inside the micro controller the pin has always 0 throw impedance
+
+    - floating:
+        - inside the micro controller the pin is not connected to any thing and it has impendanance
+
+- slew rate:
+    - how fast u can change the voltage from 0 to 1
+    - the higher the slew rate the better the GPIO
+    - the higher slew rate would cause noise on the system 
+
+- remap:
+    - change the alternative function of the pin 
+
 - CMISIS:
     - it is a library for arm
 
@@ -468,8 +527,8 @@ integer:
         - SRAM: static doesnot need to be refreshed, fast, expensiver
         - DRAM: based on capacitor, needed to be recharged, slower, cheaper
     - the data can be stord as big endian or small endian.
-        - big endian: the first byte is on the right so the word would be byte3, byte2, byte1. byte0
-        - little endian: the first byte is on the left, so the world would be byte0, byte1, byte2, byte3
+        - big endian: we store the MSB at first 0x11223344 would be stored address0 = 11, address3=44
+        - little endian: we store the less significant byte first 0x11223344 byte0=44, byte3=11
     - word size is the size of an integer 
 
 - I/O:
@@ -538,6 +597,31 @@ integer:
         - all devices can receive data
         - only the master can send data
 
+- communication:
+    - syhnchronise: the data is sending with a clock, where the device which send the data would send at the rising edge of the clock while the device which receive the data would get the data at the failing edge of the clock 
+    - asynchronise:
+        - there is no clock between sender and the receivcer device 
+        - the frame would define when the device is sending data 
+        - and there is a baud rate to define the speed at which the device should sample the data 
+
+    - throughput:
+        - the amount bits which is send in a second 
+
+    - UART:
+        - it is asynchronise communication 
+        - the is no clock is required as it is a synchrnoise communication
+        - no return to zero:
+            - 1 would take a whole cycle 
+            - 0 would take a whole cycle 
+        - return to zero:
+            - 1 would take a half cycle 
+            - 0 would take a whole cycle 
+        
+        - over samplying:
+            - more bits would be captured within the cycle and then a voting system is used to decide weather this bit is zero or one
+
+        - flow control:
+            - two wires are added to the UART request to send(O/P), clear to send(I/P)
 
 #########################
 #### Operating system ###
@@ -563,6 +647,18 @@ integer:
     
 - IDE:
     - integerated developement
+    - there is atm32cube ide is the ide from stm based on eclipse to program stm board
+
+- stm32cube:
+    - u need workspace to store the project u are working on
+    - workspace where you store your projects
+    - to create new project new -> new project -> and then select the board or the micro controller
+
+- SWD:
+    - serial wire Debug
+    - consist of Data, clock, trace, and SWO 
+    - it is alternative to JTAG
+    - there is ITM which is buffer connect to the SWO 
 
 - toolchain:
     - compiler + linker + c.libs + binutils 
@@ -587,3 +683,10 @@ integer:
 - state machine:
     - ttool : it is a tool which u might use to draw state machine 
 
+- best practise for drivers:
+    - MCAL:
+        - it is where the micro controller code is defined such as UART, GPIO
+
+    - HAL:
+        - hardware abstraction layer 
+        - it is where the ECU data is defined such as LCM, motor
