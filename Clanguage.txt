@@ -373,7 +373,7 @@ integer:
     - int x = 123u -> to say this value is unsigned because by default the values are signed values
     - 0b1110 -> to say u are writing a binary value
     - 0x12 -> to say are writing a binary
-    
+
 ##############
 #### tools ###
 ##############
@@ -623,6 +623,91 @@ integer:
         - flow control:
             - two wires are added to the UART request to send(O/P), clear to send(I/P)
 
+    SPI:
+        - it has clk means it is synchronise
+        - full duplex
+        - single master multi slave
+        - it has no frame, framless protocol
+        - the distance of the SPI is small as it has no error protection as it is framless
+        - it has very high throughput
+        - it is simple circuit only a shift register
+        - as it is master slave communication. the slave cannot send data to the master unless the master allow it
+
+- Timer:
+    - it a counter 
+    - if the input of the timer is frquency the counter would wort as a timer 
+
+    - RTC:
+        - it is used to save the time in a flash and it has a battery to be able to work also when there is no power connected to the board 
+    - watch dog timer:
+        - if u are working on multi thread system, every thread would set a specific bit in a global variable and one task would reset the WDT if the bits in this variable are setted and reset the variable agian
+
+- ADC:
+    - analog digital converter
+    - signal in real life are analog 
+    - it uses an analog pin 
+    - sample rate to decide how often u read the input signal
+    - the steps are: sample-> sequencer(FIFO)  -> quantizer -> encoder -> register 
+    - the steps are:
+        - read the value -> convert to one of the steps -> encoder would convert it to analog 
+    - quantizer:
+        - it is a group of comperator to decide the step or level which u can record 
+        - to calculate the step : (Vref - Vmin) / 2
+
+    - types:
+        - parellel:
+            - using voltage divider on multiple resistance and then compare the voltage input with the volatge on the resistance
+            - fast and expsensive
+        - ramp:
+            - compare the voltage input with voltage which is outout from DAC which has digital input
+            - slow
+        - successive:
+            - it is like ramp but we start with big steps till we find match and then smooth the step to be accurate
+- CAN:
+    - multiple MCU with one pair
+    - Speed 1 Mbps -> 1000 kbits per second
+    - u can add or remove a device without changing the hardware of the bus
+    - Bus arbiteration:
+        - the message with the highest priority(low id) would be sent  
+    - CAN is event driven meaning the data is sent when it is needed      
+    - consist of three layers: application, data link, physical
+    - 0 bit is dominant which is High voltage by transiver
+    - 1 bit is recessive which is low voltage by transiver
+    - stuffing:
+        - u add zero or one when there are alot of bits are the same after each other 
+    - frames:
+        - Remote frame:
+            - i am asking about something and please answer me with a specific ID which i am sending 
+        - Data frame:
+            - it is the actual data 
+            - consist of:
+                - start of frame:
+                    - single dominant bit
+                - arbiteration:
+                    - the low priority would win 
+                    - 11 bits for arbiteration
+                    - the bit 12 is the RTR to decide data frame or remote frame when it is 0 it is data frame
+        - DLC:
+            - data length counter 
+            - the maximum size if 8 bytes 
+        - end of frame:
+            - 7 bits high to say the frame has ended 
+        - Error frame:
+            - when the error has happened 
+            - active error:
+                when the error has happened more than 97 and send 6 zeros
+            - passive:
+                - when the error has exceeded 127 then u send 6 ones
+        - overload:
+            - it is the same like error frame, but it does not increase the counter 
+            - does not cause retransmission of the message 
+            -  it happens only in the interframe space  
+    - CAN bus error:
+        - bit error
+            - if the transmitter send a bit but read another bit than which he is writing the a bit error has happened, u increase the error counter with 8 while the receiver would increase the counter with 1 
+        - stuffing error:
+            - more than 5 bits with the same values have been sent 
+ 
 #########################
 #### Operating system ###
 #########################
